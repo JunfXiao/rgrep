@@ -65,19 +65,28 @@ async fn main() {
 
             // Init
             let mut header_printed = false;
+            let mut continuous_line_found = true;
             let mut lines = fs.read_lines(path.as_path()).await.unwrap();
             let mut line_number: usize = 0;
             // Loop to read lines
             while let Some(content) = lines.read_line().await {
                 line_number = line_number + 1;
                 let positions = regex.match_result(&content);
-                if !positions.is_empty() {
+                if positions.is_empty() {
+                    continuous_line_found = false;
+                } else {
                     // Print header only if there are matches in a file
                     if !header_printed {
                         header_printed = true;
+                        continuous_line_found = true;
                         printer.print_file_meta(path.to_str().unwrap());
                     }
-                    printer.print_line_match(line_number, &content, &positions);
+                    if !continuous_line_found {
+                        printer.print_line_gap()
+                    }
+                    continuous_line_found = true;
+
+                    printer.print_line_match(&line_number.to_string(), &content, &positions);
                 }
             }
         }

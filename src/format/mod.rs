@@ -19,7 +19,7 @@ pub struct FileNotice<'a>{
 
 #[derive(Debug)]
 pub struct LineMatchNotice<'a>{
-    pub line_number:usize,
+    pub line_number:&'a str,
     pub content: &'a str,
     pub colored_positions:&'a Vec<Position>
 }
@@ -27,7 +27,7 @@ pub struct LineMatchNotice<'a>{
 #[derive(Debug)]
 pub struct ErrorNotice<'a>{
     pub error: &'a str,
-    pub line_number:Option<usize>,
+    pub line_number:Option<&'a str>,
     pub path: Option<&'a str>
 }
 
