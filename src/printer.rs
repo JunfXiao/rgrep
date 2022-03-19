@@ -1,4 +1,5 @@
 use std::fmt::Display;
+use std::marker::PhantomData;
 use crate::{ErrorNotice, FileNotice, LineMatchNotice, MatchOutput, Notice, Position};
 
 
@@ -6,7 +7,7 @@ pub struct Printer<M: Display, T: MatchOutput<M>>
 {
     // To pass the compiler
     // Otherwise: error[E0392]: parameter `M` is never used
-    _m: Option<M>,
+    _m : PhantomData<M>,
     pub formatter: T,
 }
 
@@ -14,7 +15,7 @@ impl<M:Display,T:MatchOutput<M>> Printer<M, T> {
 
     pub fn new(formatter: T) -> Printer<M,T>{
         Self{
-            _m:None,
+            _m: Default::default(),
             formatter
         }
     }
